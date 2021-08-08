@@ -1,0 +1,8 @@
+add_library(CryCommon STATIC)
+
+set (CRYENGINE_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}")
+
+set_property(TARGET CryCommon PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+        "${CRYENGINE_SOURCE_DIR}/CryCommon"
+        "${CRYENGINE_SOURCE_DIR}/CryCommon/3rdParty"
+)

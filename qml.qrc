@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Resources/map1.png</file>
+        <file>Resources/map_1mi.png</file>
+        <file>Resources/map_100ft.png</file>
+        <file>qtquickcontrols2.conf</file>
+    </qresource>
+</RCC>
