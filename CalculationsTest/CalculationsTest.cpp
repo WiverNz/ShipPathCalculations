@@ -27,6 +27,8 @@ void ICalculationTest::paint(QPainter* painter)
 	paintInfoText(painter, textHeightPosition, "Course", QString::number(m_statusShip.course.ToDegrees()));
 	paintInfoText(painter, textHeightPosition, "Rudder", QString::number(m_statusShip.rudder));
 	paintInfoText(painter, textHeightPosition, "Steer", QString::number(m_statusShip.steer));
+	paintInfoText(painter, textHeightPosition, "Engine RPM", QString::number(m_statusShip.rightEngineRPM));
+	paintInfoText(painter, textHeightPosition, "Speed (knots)", QString::number(m_statusShip.speed));
 	paintInfoText(painter, textHeightPosition, "Speed", "1x");
 
 	// QSizeF itemSize = size();
@@ -42,7 +44,8 @@ void ICalculationTest::paintInfoText(QPainter *painter, int &heightPosition, con
 
 void ICalculationTest::timerUpdate(const double& diffMsTime, const double& currTime)
 {
-	m_currPos += m_moveCalc->GetNextDiffPos(m_currPos, diffMsTime);
+	m_moveCalc->Calculate(diffMsTime);
+	m_currPos += m_moveCalc->GetNextDiffPos(m_currPos);
 	m_positions.append(m_currPos);
 }
 
@@ -110,6 +113,32 @@ double ICalculationTest::gridCellSize() const
 	return 100;
 }
 
+void ICalculationTest::keyPressEvent(QKeyEvent *keyEvent)
+{
+	qDebug() << keyEvent;
+	if (keyEvent->key() == Qt::Key_Left || keyEvent->key() == Qt::Key_A)
+	{
+		m_moveCalc->LeftClickHandler();
+	}
+	else if (keyEvent->key() == Qt::Key_Right || keyEvent->key() == Qt::Key_D)
+	{
+		m_moveCalc->RightClickHandler();
+	}
+	else if (keyEvent->key() == Qt::Key_Up || keyEvent->key() == Qt::Key_W)
+	{
+		m_moveCalc->ForwardClickHandler();
+	}
+	else if (keyEvent->key() == Qt::Key_Down || keyEvent->key() == Qt::Key_S)
+	{
+		m_moveCalc->BackClickHandler();
+	}
+}
+
+CalculationsTest::CalculationsTest(QQuickItem* parent) : QQuickPaintedItem(parent)
+{
+	m_calculationTest = std::make_shared<CalculationTest>(this, ETest::Speed_1x1);
+}
+
 CalculationTest::CalculationTest(const CalculationsTest *calculations, const ETest& test)
 	: ICalculationTest(calculations, test)
 {
@@ -124,15 +153,15 @@ CalculationTest::CalculationTest(const CalculationsTest *calculations, const ETe
 	m_positions.append(m_currPos);
 
 	// Ship settings:
-	m_statusShip.speed = 7.6f;
+	m_shipParameters.engineSpeed = 375;
+	m_shipParameters.maxSpeed = 7.6f;
+
+	m_statusShip.speed = m_shipParameters.maxSpeed;
+	m_statusShip.leftEngineRPM = m_shipParameters.engineSpeed;
+	m_statusShip.rightEngineRPM = m_shipParameters.engineSpeed;
 	m_statusShip.rudder = 0.f;
 	m_statusShip.steer = 0.f;
 	m_statusShip.course = CryTransform::CAngle::FromDegrees(68.5f);
-}
-
-CalculationsTest::CalculationsTest(QQuickItem* parent) : QQuickPaintedItem(parent)
-{
-	m_calculationTest = std::make_shared<CalculationTest>(this, ETest::Speed_1x1);
 }
 
 void CalculationsTest::paint(QPainter* painter)
@@ -166,6 +195,13 @@ double CalculationsTest::gridCellSize() const
 void CalculationsTest::setGridCellSize(const double& cellSize)
 {
 	m_gridCellSize = cellSize;
+}
+
+void CalculationsTest::keyPressEvent(QKeyEvent* keyEvent)
+{
+	if (m_calculationTest) {
+		m_calculationTest->keyPressEvent(keyEvent);
+	}
 }
 
 void CalculationsTest::clearCalculation()

@@ -5,6 +5,7 @@ import MainWindow.gui 1.0
 
 MainWindow {
     id: mainWindow
+    objectName: "mainWindow"
     width: 900
     height: 650
     visible: true
@@ -44,6 +45,7 @@ MainWindow {
 
     Grid {
         id: mainGrid
+        objectName: "mainGrid"
         width: parent.width
         height: parent.height
         rows: 2
@@ -51,6 +53,7 @@ MainWindow {
 
         CalculationsTest {
             id: calculationsTest
+            objectName: "calculationsTest"
             width: parent.width;
             height: parent.height - 50
 

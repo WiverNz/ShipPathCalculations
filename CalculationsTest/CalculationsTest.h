@@ -37,7 +37,7 @@ public:
 	ConstPositions getPositions() const;
 	virtual void clearPositions();
 	virtual double gridCellSize() const;
-
+	virtual void keyPressEvent(QKeyEvent* keyEvent);
 
 protected:
 	const CalculationsTest* m_calculations;
@@ -85,6 +85,7 @@ public:
 	const QVariantList& positions() const;
 	double gridCellSize() const;
 	void setGridCellSize(const double& cellSize);
+	void keyPressEvent(QKeyEvent* keyEvent) override;
 
 protected:
 	ICalculationTestPtr m_calculationTest;

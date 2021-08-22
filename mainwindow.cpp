@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "CalculationsTest/CalculationsTest.h"
 
 #include <QDebug>
 
@@ -16,7 +17,20 @@ void CMainWindow::resizeEvent(QResizeEvent* revent)
 	m_resizeTimer.start(m_resizeTimeOut);
 }
 
+void CMainWindow::keyPressEvent(QKeyEvent* revent)
+{
+	QQuickWindow::keyPressEvent(revent);
+	if (m_calculationTest) {
+		m_calculationTest->keyPressEvent(revent);
+	}
+}
+
 void CMainWindow::resizeTimeOut()
 {
 	emit resizeEnded(m_width, m_height);
+}
+
+void CMainWindow::setCalculationsTest(CalculationsTest *calculationsTest)
+{
+	m_calculationTest = calculationsTest;
 }
