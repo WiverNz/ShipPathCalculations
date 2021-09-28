@@ -577,7 +577,7 @@ CRYMM_INLINE void* CryModuleReallocAlign(void* memblock, size_t size, size_t ali
 		//const size_t oldSize = memblock ? _msize(memblock) : 0;
 		const size_t oldSize = size;
 		// memalign is deprecated but not all platforms have aligned_alloc()...
-		void* alignedAlloc = memalign(alignment, size);
+		void* alignedAlloc = _aligned_malloc(alignment, size);
 		if (alignedAlloc && oldSize > 0)
 		{
 			// We copy from the unaligned re-allocation rather than original memblock to ensure we
@@ -600,7 +600,7 @@ CRYMM_INLINE void* CryModuleMemalign(size_t size, size_t alignment) noexcept
 {
 	MEMREPLAY_SCOPE(EMemReplayAllocClass::UserPointer, EMemReplayUserPointerClass::CryMalloc);
     #if (defined(CRY_COMPILER_CLANG) || defined(CRY_COMPILER_GCC)) && !CRY_PLATFORM_APPLE
-	void* ret = memalign(alignment, size);
+	void* ret = _aligned_malloc(alignment, size);
 	#else
 	void* ret = _aligned_malloc(size, alignment);
 	#endif

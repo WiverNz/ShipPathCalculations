@@ -301,8 +301,9 @@ namespace Cry {
 				CCursorShowerWithStack cursorShowerWithStack;
 				cursorShowerWithStack.StoreCurrentAndShow();
 
+				const DWORD wsDisabled = (gEnv ? 0 : WS_DISABLED);
 #if defined(eCryModule)
-				SDlgItem<256> currentModuleItem = { BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE | (gEnv ? 0 : WS_DISABLED) | WS_TABSTOP, 0, 165, 113, 100, 14, IDC_CRYASSERT_BUTTON_MODULE, 0xFFFF, 0x0080 };
+				SDlgItem<256> currentModuleItem = { BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE | wsDisabled | WS_TABSTOP, 0, 165, 113, 100, 14, IDC_CRYASSERT_BUTTON_MODULE, 0xFFFF, 0x0080 };
 
 				wstring message = L"Ignore All From ";
 				message += CryStringUtils::UTF8ToWStr(GetCryModuleName(eCryModule));
@@ -311,15 +312,15 @@ namespace Cry {
 #else
 				const int numEntries = 16;
 #endif
-
+				const DWORD wsVisible = (IsDebuggerPresent() ? WS_VISIBLE : 0);
 				SDlgData dialog =
 				{
 					{ DS_SETFOREGROUND | DS_MODALFRAME | DS_3DLOOK | DS_SETFONT | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_VISIBLE, 0, numEntries, 0,   0,   380, 134 },
 					0, 0, DLG_TITLE, 8, DLG_FONT,
 					{ BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP,                                                                      0, 7,           113, 50,  14,  IDC_CRYASSERT_BUTTON_CONTINUE, 0xFFFF, 0x0080, DLG_ITEM_TEXT_0, 0 },
 					{ BS_DEFPUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP,                                                                   0, 60,          113, 50,  14,  IDC_CRYASSERT_BUTTON_IGNORE, 0xFFFF, 0x0080, DLG_ITEM_TEXT_12, 0 },
-					{ BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE | (gEnv ? 0 : WS_DISABLED) | WS_TABSTOP,                                           0, 113,         113, 50,  14,  IDC_CRYASSERT_BUTTON_DISABLE, 0xFFFF, 0x0080, DLG_ITEM_TEXT_15, 0 },
-					{ BS_PUSHBUTTON | WS_CHILD | (IsDebuggerPresent() ? WS_VISIBLE : 0) | WS_TABSTOP,                                          0, 271,         113, 50,  14,  IDC_CRYASSERT_BUTTON_BREAK, 0xFFFF, 0x0080, DLG_ITEM_TEXT_14, 0 },
+					{ BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE | wsDisabled | WS_TABSTOP,                                                         0, 113,         113, 50,  14,  IDC_CRYASSERT_BUTTON_DISABLE, 0xFFFF, 0x0080, DLG_ITEM_TEXT_15, 0 },
+					{ BS_PUSHBUTTON | WS_CHILD | wsVisible | WS_TABSTOP,                                                                       0, 271,         113, 50,  14,  IDC_CRYASSERT_BUTTON_BREAK, 0xFFFF, 0x0080, DLG_ITEM_TEXT_14, 0 },
 					{ BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP,                                                                      0, 324,         113, 50,  14,  IDC_CRYASSERT_BUTTON_STOP, 0xFFFF, 0x0080, DLG_ITEM_TEXT_1, 0 },
 					{ BS_GROUPBOX | WS_CHILD | WS_VISIBLE,                                                                                     0, 7,           7,   366, 100, IDC_CRYASSERT_STATIC_TEXT, 0xFFFF, 0x0080, DLG_ITEM_TEXT_2, 0 },
 					{ ES_LEFT | ES_AUTOHSCROLL | ES_READONLY | WS_BORDER | WS_CHILD | WS_VISIBLE,                                              0, 50,          48,  25,  13,  IDC_CRYASSERT_EDIT_LINE, 0xFFFF, 0x0081, DLG_ITEM_TEXT_3, 0 },
